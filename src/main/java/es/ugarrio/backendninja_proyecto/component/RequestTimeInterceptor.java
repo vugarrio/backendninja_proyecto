@@ -40,7 +40,7 @@ public class RequestTimeInterceptor extends HandlerInterceptorAdapter {
 			throws Exception {
 		
 		long startTime = (long)request.getAttribute("startTime");
-		LOGGER.info("-- REQUEST URL: '" + request.getRequestURI().toString() + "' -- TOTAL TIME: '" + (System.currentTimeMillis() - startTime) + "' ms");
+		LOGGER.info("Url to: '" + request.getRequestURI().toString() + "' in '" + (System.currentTimeMillis() - startTime) + "' ms");
 		
 	}
 

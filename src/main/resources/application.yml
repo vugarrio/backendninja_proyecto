@@ -24,7 +24,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/0000_curso_spring_boot_MAMA
     username: root
-    password: tente
+    password: 
   
     
   jpa:
