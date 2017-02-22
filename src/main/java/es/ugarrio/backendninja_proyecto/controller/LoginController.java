@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import es.ugarrio.backendninja_proyecto.constant.ViewConstant;
 import es.ugarrio.backendninja_proyecto.model.UserCredencial;
 
 @Controller
@@ -35,7 +36,7 @@ public class LoginController {
 		
 		LOG.info("Returning to view: login");
 		
-		return "login";
+		return ViewConstant.LOGIN;
 	}
 	
 	@PostMapping("/logincheck")
@@ -44,7 +45,7 @@ public class LoginController {
 		
 		if (userCredencial.getUsername().equals("user") && userCredencial.getPassword().equals("user")) {
 			LOG.info("Returning to view: contacts");
-			return "contacts";
+			return ViewConstant.CONTACTS;
 		}
 		
 		LOG.info("Returning to view: redirect:/login?error");

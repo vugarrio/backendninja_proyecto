@@ -22,9 +22,9 @@ spring:
   
   #Base de datos  
   datasource:
-    url: jdbc:mysql://localhost:3306/0000_curso_spring_boot_MAMA
+    url: jdbc:mysql://localhost:3306/0000_curso_spring_boot_MAMA?useSSL=false
     username: root
-    password: 
+    password: tente
   
     
   jpa:
