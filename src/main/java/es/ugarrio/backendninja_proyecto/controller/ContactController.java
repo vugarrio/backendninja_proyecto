@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import es.ugarrio.backendninja_proyecto.constant.ViewConstant;
@@ -68,6 +69,15 @@ public class ContactController {
 
 		LOG.info("Returning to view: " + ViewConstant.CONTACTS +  "'  -- DATA: 'contacts'");
 		return mav;
+	}
+	
+	
+	@GetMapping("/removecontact")
+	public ModelAndView removeContact(@RequestParam(name="id", required=true) int id) {
+		LOG.info("METHOD: removeContact() -- PARAMS: id=" + id);
+		
+		contactService.removeContact(id);
+		return showcontacts();
 	}
 
 }
