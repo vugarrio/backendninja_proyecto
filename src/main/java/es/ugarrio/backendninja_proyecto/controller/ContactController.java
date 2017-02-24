@@ -35,12 +35,19 @@ public class ContactController {
 	}
 
 	@GetMapping("/contactform")
-	public String redirectContactForm(Model model) {
-
+	public String redirectContactForm( @RequestParam(name="id", required=false) int id,
+			                           Model model) {
+		LOG.info("METHOD: redirectContactForm() -- PARAMS: id=" + id);	
+		ContactModel contactModel = new ContactModel();
+		
+		if (id != 0) {
+			contactModel = contactService.findContactByIdModel(id);
+		}
+		
 		// Al formulario se le pasa el obj contactModel vacio, que es el que
 		// luego nos envia con los datos introducidos por el usuario.
-		model.addAttribute("contactModel", new ContactModel());
-
+		model.addAttribute("contactModel", contactModel);
+		
 		LOG.info("Returning to view: " + ViewConstant.CONTACT_FORM);
 		return ViewConstant.CONTACT_FORM;
 	}
