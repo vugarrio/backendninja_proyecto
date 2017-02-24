@@ -48,6 +48,8 @@ public class LoginController {
 			return "redirect:/contacts/showcontacts";
 		}
 		
+		
+		
 		LOG.info("Returning to view: redirect:/login?error");
 		return "redirect:/login?error";
 		
