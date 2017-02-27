@@ -11,8 +11,8 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "user_roles", uniqueConstraints = @UniqueConstraint(columnNames = {"role", "username"}))
-
+@Table(name = "user_roles", 
+       uniqueConstraints = @UniqueConstraint(columnNames = {"role", "username"}))
 public class UserRole {
 	
 	@Id
@@ -20,23 +20,28 @@ public class UserRole {
 	@Column(name = "user_role_id", unique = true, nullable = false )
 	private Integer userRoleId;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	// FetchType.LAZY = forma PEREZOSA se cargan los datos en el momento de pedirlo
+	// FetchType.EAGER = forma PROACTIVA se carga los datos al carga la clase Users	
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "username", nullable = false)
 	private User user;
 	
 	@Column(name = "role", nullable = false, length = 45)
 	private String role;
 	
-	
+	//Siempre un contructor vacio
 	public UserRole() {
 	}
 
-	public UserRole(Integer userRoleId, User user, String role) {
+	
+
+	public UserRole(User user, String role) {
 		super();
-		this.userRoleId = userRoleId;
 		this.user = user;
 		this.role = role;
 	}
+
+
 
 	public Integer getUserRoleId() {
 		return userRoleId;
@@ -61,5 +66,12 @@ public class UserRole {
 	public void setRole(String role) {
 		this.role = role;
 	}
+
+	@Override
+	public String toString() {
+		return "UserRole [userRoleId=" + userRoleId + ", user=" + user + ", role=" + role + "]";
+	}
+	
+	
 	
 }

@@ -4,6 +4,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import es.ugarrio.backendninja_proyecto.constant.ViewConstant;
+
 import es.ugarrio.backendninja_proyecto.model.ContactModel;
 import es.ugarrio.backendninja_proyecto.service.ContactService;
 
@@ -33,7 +37,8 @@ public class ContactController {
 		LOG.info("Returning to view: redirect:/contacts/showcontacts");
 		return "redirect:/contacts/showcontacts";
 	}
-
+	
+	@PreAuthorize("hasRole('ROLE_USER')") // Indicamos que solo pueden acceder los usuarios con el role ROLE_USER
 	@GetMapping("/contactform")
 	public String redirectContactForm( @RequestParam(name="id", required=false) int id,
 			                           Model model) {
@@ -71,7 +76,11 @@ public class ContactController {
 		ModelAndView mav = new ModelAndView(ViewConstant.CONTACTS);
 
 		LOG.info("METHOD: showcontacts() -- PARAMS: ");
-
+		
+		//Obtenemos el usuario que esta logado.
+		User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		
+		mav.addObject("username", user.getUsername());
 		mav.addObject("contacts", contactService.listAllContacts());
 
 		LOG.info("Returning to view: " + ViewConstant.CONTACTS +  "'  -- DATA: 'contacts'");

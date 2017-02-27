@@ -1,12 +1,20 @@
 package es.ugarrio.backendninja_proyecto.component;
 
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+
+import es.ugarrio.backendninja_proyecto.repository.LogRepository;
 
 
 // Esta clase se va ejecutar siempre que se llame al controlador que la inyectemos.
@@ -18,7 +26,13 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 @Component("requestTimeInterceptor")
 public class RequestTimeInterceptor extends HandlerInterceptorAdapter {
 	
+	// Inyectamos el repositorio para acceder a la tabla de logs
+	@Autowired
+	@Qualifier("logRepository")
+	private LogRepository logRepository;
+	
 	private static final Log LOGGER = LogFactory.getLog(RequestTimeInterceptor.class);
+	
 		
 	//Se ejecuta antes de entrar en el metodo del controlador
 	@Override
@@ -39,8 +53,28 @@ public class RequestTimeInterceptor extends HandlerInterceptorAdapter {
 			HttpServletResponse response, Object handler, Exception ex)
 			throws Exception {
 		
+		
 		long startTime = (long)request.getAttribute("startTime");
-		LOGGER.info("Url to: '" + request.getRequestURI().toString() + "' in '" + (System.currentTimeMillis() - startTime) + "' ms");
+		
+		//Datos para guardar en el log
+		String url = request.getRequestURI().toString();
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String username = "";
+		String details = "";
+		
+		if (null != auth) {
+			details = auth.getDetails().toString();
+		}
+		
+		if (null != auth && auth.isAuthenticated()) {
+			username = auth.getName();
+		}
+		
+		//Guardamos en el log
+		es.ugarrio.backendninja_proyecto.entity.Log log = new es.ugarrio.backendninja_proyecto.entity.Log(new Date(), details, username, url);
+		logRepository.save(log);
+		
+		LOGGER.info("Url to: '" + url + "' in '" + (System.currentTimeMillis() - startTime) + "' ms");
 		
 	}
 

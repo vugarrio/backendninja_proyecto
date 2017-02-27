@@ -16,42 +16,42 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import es.ugarrio.backendninja_proyecto.entity.UserRole;
-import es.ugarrio.backendninja_proyecto.repository.ContactRepository;
 import es.ugarrio.backendninja_proyecto.repository.UserRepository;
-
-
 
 @Service("userService")
 public class UserService implements UserDetailsService {
-	
-	//Inyectamos el repositorio
+
+	// Inyectamos el repositorio
 	@Autowired
 	@Qualifier("userRepository")
 	private UserRepository userRepository;
-	
-	
+
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		es.ugarrio.backendninja_proyecto.entity.User user = userRepository.findByUsername(username);
+
+		if (user == null) {
+			throw new UsernameNotFoundException("Wrong username or password");
+		}
+
 		List<GrantedAuthority> authorities = buildAuthorities(user.getUserRole());
 		return builUser(user, authorities);
 	}
-	
-	// Construimos un usuario de spring security a partir de nuestro usuario y lista de roles
-	private User builUser(es.ugarrio.backendninja_proyecto.entity.User user, List<GrantedAuthority>  authorities) {
+
+	// Construimos un usuario de spring security a partir de nuestro usuario y
+	// lista de roles
+	private User builUser(es.ugarrio.backendninja_proyecto.entity.User user, List<GrantedAuthority> authorities) {
 		return new User(user.getUsername(), user.getPassword(), user.isEnabled(), true, true, true, authorities);
 	}
-	
-	// Transforma nuestro listado de UserRole en una lista de GrantedAuthority que es como lo
+
+	// Transforma nuestro listado de UserRole en una lista de GrantedAuthority
+	// que es como lo
 	// spring security maneja los roles de usuario
-	private List<GrantedAuthority> buildAuthorities (Set<UserRole> userRoles) {
+	private List<GrantedAuthority> buildAuthorities(Set<UserRole> userRoles) {
 		Set<GrantedAuthority> auths = new HashSet<GrantedAuthority>();
-		for (UserRole userRole: userRoles) {
+		for (UserRole userRole : userRoles) {
 			auths.add(new SimpleGrantedAuthority(userRole.getRole()));
 		}
 		return new ArrayList<GrantedAuthority>(auths);
 	}
 }
-
-
-
