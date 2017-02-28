@@ -1,7 +1,6 @@
 package es.ugarrio.backendninja_proyecto.controller;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,7 +24,7 @@ import es.ugarrio.backendninja_proyecto.service.ContactService;
 @RequestMapping("/contacts")
 public class ContactController {
 
-	private static final Log LOG = LogFactory.getLog(ContactController.class);
+	private static final Logger LOG = Logger.getLogger(ContactController.class);
 
 	// Inyectamos el servicio de contactos
 	@Autowired
@@ -43,7 +42,7 @@ public class ContactController {
 	public String redirectContactForm( @RequestParam(name="id", required=false) int id,
 			                           Model model) {
 		LOG.info("METHOD: redirectContactForm() -- PARAMS: id=" + id);	
-		ContactModel contactModel = new ContactModel();
+		ContactModel contactModel = new ContactModel();  
 		
 		if (id != 0) {
 			contactModel = contactService.findContactByIdModel(id);
@@ -74,7 +73,7 @@ public class ContactController {
 	@GetMapping("/showcontacts")
 	public ModelAndView showcontacts() {
 		ModelAndView mav = new ModelAndView(ViewConstant.CONTACTS);
-
+		
 		LOG.info("METHOD: showcontacts() -- PARAMS: ");
 		
 		//Obtenemos el usuario que esta logado.

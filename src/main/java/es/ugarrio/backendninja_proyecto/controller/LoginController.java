@@ -1,7 +1,6 @@
 package es.ugarrio.backendninja_proyecto.controller;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +11,7 @@ import es.ugarrio.backendninja_proyecto.constant.ViewConstant;
 @Controller
 public class LoginController {
 	
-	private static final Log LOG = LogFactory.getLog(LoginController.class);
+	private static final Logger LOG = Logger.getLogger(LoginController.class);
 
 		
 	@GetMapping("/login")

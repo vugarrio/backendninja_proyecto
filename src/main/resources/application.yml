@@ -15,7 +15,7 @@ server:
 # THYMELEAF (ThymeleafAutoConfiguration)
 spring: 
   thymeleaf: 
-    cache: true                      # Enable template caching
+    cache: false                     # Enable template caching -- Tiene que estar a 'false' para que funcione el plugin 'Spring Loaded' (Cambios front en caliente)
     encoding: UTF-8                  # Template encoding
     prefix: classpath:/templates/    # Prefix that gets prepended to view names when building a URL.
     suffix: .html                    # Suffix that gets appended to view names when building a URL.
